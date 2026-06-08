@@ -1,0 +1,77 @@
+name: "TypeDoc Pages (versioned)"
+description: "Build versioned TypeDoc docs (@shipgirl/typedoc-plugin-versions) and publish them to GitHub Pages, preserving the version history."
+author: "Shane Froebel"
+branding:
+  icon: book-open
+  color: purple
+
+inputs:
+  github-token:
+    description: "Token used to read the publish branch and deploy (usually secrets.GITHUB_TOKEN)."
+    required: true
+  node-version:
+    description: "Node.js version used to build the docs."
+    required: false
+    default: "lts/*"
+  docs-dir:
+    description: "Directory TypeDoc writes to (must match the `out` in typedoc.json)."
+    required: false
+    default: "docs"
+  publish-branch:
+    description: "Branch the rendered site is published to (the Pages source)."
+    required: false
+    default: "gh-pages"
+  install-command:
+    description: "Command that installs dependencies before building."
+    required: false
+    default: "npm ci --ignore-scripts --legacy-peer-deps"
+  build-command:
+    description: "Command that runs TypeDoc."
+    required: false
+    default: "npm run typedoc"
+
+runs:
+  using: "composite"
+  steps:
+    # Restore the previously published docs into the output dir so
+    # @shipgirl/typedoc-plugin-versions APPENDS the new version rather than
+    # replacing the whole history. First publish (no branch yet) is a no-op.
+    # Assumes the consumer has already run actions/checkout.
+    - name: Restore published docs
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PUBLISH_BRANCH: ${{ inputs.publish-branch }}
+        DOCS_DIR: ${{ inputs.docs-dir }}
+      run: |
+        if git ls-remote --exit-code --heads origin "$PUBLISH_BRANCH" >/dev/null 2>&1; then
+          git clone --branch "$PUBLISH_BRANCH" --depth 1 \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .docs-prev
+          rm -rf .docs-prev/.git
+          mkdir -p "$DOCS_DIR"
+          cp -a .docs-prev/. "$DOCS_DIR"/
+          rm -rf .docs-prev
+        else
+          echo "No '$PUBLISH_BRANCH' branch yet -- first publish."
+        fi
+
+    - name: Setup Node ${{ inputs.node-version }}
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      shell: bash
+      run: ${{ inputs.install-command }}
+
+    - name: Build docs
+      shell: bash
+      run: ${{ inputs.build-command }}
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ inputs.github-token }}
+        publish_branch: ${{ inputs.publish-branch }}
+        publish_dir: ./${{ inputs.docs-dir }}
