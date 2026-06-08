@@ -1,0 +1,75 @@
+name: Release Manager
+# On push to main: anticipate the next version with release-drafter, write it
+# into CHANGELOG.md via the changelog action, and commit that back as a
+# [skip ci] pre-release commit. The maintainer then MANUALLY publishes the
+# GitHub Release (which creates the tag) and repoints the floating @vN tag --
+# a GitHub Action is released specially, by hand. No package version to bump.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md']
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-manager:
+    name: 🚀 Update Changelog & Prep Release
+    runs-on: ubuntu-latest
+    steps:
+      # HARD STOP: the Release Manager needs a one-time, per-repo setup. If it is
+      # not done (or a release-method update adds a new step), fail loudly with the
+      # checklist instead of a cryptic token error.
+      - name: Check release prerequisites
+        shell: bash
+        env:
+          APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+        run: |
+          if [ -z "$APP_PRIVATE_KEY" ]; then
+            echo "::error title=Release setup required::APP_PRIVATE_KEY is not set."
+            echo "One-time setup required before the Release Manager works (per repo):"
+            echo "  1. Install the Bugs5382 release GitHub App on this repository."
+            echo "  2. Add the APP_PRIVATE_KEY secret (the App private key), org or repo level."
+            echo "  3. Add the release App as a bypass actor on the branch ruleset, so the"
+            echo "     [skip ci] changelog push to main is not blocked."
+            echo "  The App Client ID is hard-coded in this workflow; only the above are manual."
+            echo "  Re-check this list whenever the release method is updated."
+            exit 1
+          fi
+          echo "Release prerequisites present."
+
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: "Iv23ligVrrLzGPXe28dn"
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
+
+      - name: Release Drafter (anticipate version)
+        id: drafter
+        uses: release-drafter/release-drafter@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update CHANGELOG.md
+        uses: bugs5382/changelog-updater-action@v0.3.2
+        env:
+          LOG_LEVEL: debug
+          LOG_FORMAT: text
+        with:
+          tag: v${{ steps.drafter.outputs.resolved_version }}
+          notes: ${{ steps.drafter.outputs.body }}
+          path: .
+          diff: 'true'
+
+      - name: Commit and push changelog
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "chore(pre-release): v${{ steps.drafter.outputs.resolved_version }} [skip ci]"
