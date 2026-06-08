@@ -54,6 +54,7 @@ plugin needs that persistent branch to accumulate history, so this action does n
 | Input | Default | Description |
 |---|---|---|
 | `github-token` | _(required)_ | Token used to read the publish branch and deploy — usually `secrets.GITHUB_TOKEN`. |
+| `versions` | `true` | Preserve version history (restore prior docs before building, for `@shipgirl/typedoc-plugin-versions`). Set `false` for a single-version site that is replaced on each deploy. |
 | `node-version` | `lts/*` | Node.js version used to build the docs. |
 | `docs-dir` | `docs` | Directory TypeDoc writes to (must match `out` in `typedoc.json`). |
 | `publish-branch` | `gh-pages` | Branch the rendered site is published to. |
@@ -62,9 +63,14 @@ plugin needs that persistent branch to accumulate history, so this action does n
 
 ## How it works
 
-1. Restore the docs already published on `publish-branch` into `docs-dir` (skipped on first run).
-2. Install dependencies and run TypeDoc; the versions plugin adds the current version.
+1. Restore the docs already published on `publish-branch` into `docs-dir` — skipped on first run,
+   and skipped entirely when `versions: false`.
+2. Install dependencies and run TypeDoc; with the versions plugin enabled this adds the current
+   version alongside the restored ones.
 3. Deploy `docs-dir` to `publish-branch` via `peaceiris/actions-gh-pages`.
+
+With `versions: false` the action just builds and deploys the current docs (each deploy replaces
+the previous site) — use this when you don't run the versions plugin.
 
 ## License
 

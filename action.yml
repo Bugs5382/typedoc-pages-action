@@ -9,6 +9,10 @@ inputs:
   github-token:
     description: "Token used to read the publish branch and deploy (usually secrets.GITHUB_TOKEN)."
     required: true
+  versions:
+    description: "Preserve version history: restore the previously published docs before building so @shipgirl/typedoc-plugin-versions appends the new version. Set to 'false' for a single-version site that is replaced on each deploy."
+    required: false
+    default: "true"
   node-version:
     description: "Node.js version used to build the docs."
     required: false
@@ -36,8 +40,10 @@ runs:
     # Restore the previously published docs into the output dir so
     # @shipgirl/typedoc-plugin-versions APPENDS the new version rather than
     # replacing the whole history. First publish (no branch yet) is a no-op.
-    # Assumes the consumer has already run actions/checkout.
+    # Skipped when versions are disabled. Assumes the consumer has already run
+    # actions/checkout.
     - name: Restore published docs
+      if: ${{ inputs.versions == 'true' }}
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
