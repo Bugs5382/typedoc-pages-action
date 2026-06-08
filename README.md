@@ -72,6 +72,11 @@ plugin needs that persistent branch to accumulate history, so this action does n
 With `versions: false` the action just builds and deploys the current docs (each deploy replaces
 the previous site) — use this when you don't run the versions plugin.
 
+## Acknowledgments
+
+Thanks to [`@shipgirl/typedoc-plugin-versions`](https://www.npmjs.com/package/@shipgirl/typedoc-plugin-versions)
+— the version dropdown and multi-version history this action publishes are powered by that plugin.
+
 ## License
 
 MIT
