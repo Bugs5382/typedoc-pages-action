@@ -57,11 +57,19 @@ runs:
           mkdir -p "$DOCS_DIR"
           cp -a .docs-prev/. "$DOCS_DIR"/
           rm -rf .docs-prev
-          # Drop the plugin-managed aliases (stable/dev/latest) and any top-level
-          # symlinks so @shipgirl/typedoc-plugin-versions can regenerate them
-          # without an EEXIST collision. The version directories + versions.js
-          # metadata are kept, so history is preserved.
+          # @shipgirl/typedoc-plugin-versions regenerates every alias on each
+          # build: stable, dev, latest, and the vMAJOR / vMAJOR.MINOR aliases.
+          # Drop them all from the restored docs -- they come back as plain
+          # directories, so a symlink-only filter misses them -- and keep only
+          # the real vMAJOR.MINOR.PATCH directories plus the metadata, so the
+          # plugin can recreate the aliases without an EEXIST collision.
           rm -rf "$DOCS_DIR/stable" "$DOCS_DIR/dev" "$DOCS_DIR/latest"
+          find "$DOCS_DIR" -maxdepth 1 -mindepth 1 -type d -name 'v*' | while read -r vdir; do
+            case "$(basename "$vdir")" in
+              v[0-9]*.[0-9]*.[0-9]*) : ;;
+              v[0-9]*) rm -rf "$vdir" ;;
+            esac
+          done
           find "$DOCS_DIR" -maxdepth 1 -type l -delete
         else
           echo "No '$PUBLISH_BRANCH' branch yet -- first publish."
