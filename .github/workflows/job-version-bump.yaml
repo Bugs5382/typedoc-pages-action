@@ -5,6 +5,7 @@ name: Release Manager
 # GitHub Release (which creates the tag) and repoints the floating @vN tag --
 # a GitHub Action is released specially, by hand. No package version to bump.
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths-ignore: ['**.md']
