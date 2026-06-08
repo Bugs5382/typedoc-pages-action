@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: Bugs5382/typedoc-pages-action@v1
+      - uses: Bugs5382/typedoc-pages-action@v0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
