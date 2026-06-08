@@ -1,5 +1,18 @@
 # typedoc-pages-action
 
+## v0.1.1 - 2026-06-08
+
+### What Changed 👀
+
+#### 🐛 Bug Fixes
+
+- fix: strip regenerated aliases when restoring versioned docs @Bugs5382 (#12)
+- fix(docs): pin the usage example to @v0 @Bugs5382 (#10)
+
+### Extra
+
+**Full Changelog**: https://github.com/Bugs5382/typedoc-pages-action/compare/v0.1.0...v0.1.1
+
 ## v0.1.0 - 2026-06-08
 
 ### What Changed 👀
