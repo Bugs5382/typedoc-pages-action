@@ -1,5 +1,5 @@
 name: "TypeDoc Pages (versioned)"
-description: "Build versioned TypeDoc docs (@shipgirl/typedoc-plugin-versions) and publish them to GitHub Pages, preserving the version history."
+description: "Build versioned TypeDoc docs (@shipgirl/typedoc-plugin-versions) and publish them to GitHub Pages."
 author: "Shane Froebel"
 branding:
   icon: book-open
