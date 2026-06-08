@@ -9,6 +9,10 @@
 - feat(ci): allow manual dispatch of the Release Manager @Bugs5382 (#6)
 - feat(ci): add the changelog release manager that runs before tagging @Bugs5382 (#4)
 
+#### 🐛 Bug Fixes
+
+- fix: shorten the action description under the 125-char limit @Bugs5382 (#8)
+
 #### 📄 Documentation
 
 - docs: thank @shipgirl/typedoc-plugin-versions in the readme @Bugs5382 (#1)
