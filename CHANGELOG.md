@@ -1,5 +1,21 @@
 # typedoc-pages-action
 
+## v0.1.2 - 2026-09-26
+
+### What Changed 👀
+
+#### 📄 Documentation
+
+- docs(readme): apply the lite emoji treatment @Bugs5382 (#15)
+
+#### 🧩 Dependency Updates
+
+- chore(deps): refresh the pinned TypeDoc, Node and action versions @Bugs5382 (#18)
+
+### Extra
+
+**Full Changelog**: https://github.com/Bugs5382/typedoc-pages-action/compare/v0.1.1...v0.1.2
+
 ## v0.1.1 - 2026-06-08
 
 ### What Changed 👀
