@@ -39,7 +39,7 @@ jobs:
     name: Publish Docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: Bugs5382/typedoc-pages-action@v0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
