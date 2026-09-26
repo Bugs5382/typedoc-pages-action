@@ -55,9 +55,9 @@ jobs:
 
       - name: Release Drafter (anticipate version)
         id: drafter
-        uses: release-drafter/release-drafter@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: release-drafter/release-drafter@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update CHANGELOG.md
         uses: bugs5382/changelog-updater-action@v0.3.2
