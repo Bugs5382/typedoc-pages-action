@@ -1,13 +1,13 @@
-# typedoc-pages-action
+# typedoc-pages-action 📚
 
-Build versioned [TypeDoc](https://typedoc.org) documentation with
-[`@shipgirl/typedoc-plugin-versions`](https://github.com/Vampire-Hunter/typedoc-plugin-versions)
-and publish it to GitHub Pages — **preserving the version dropdown across releases**.
+> 🗂️ Build versioned [TypeDoc](https://typedoc.org) documentation with
+> [`@shipgirl/typedoc-plugin-versions`](https://github.com/Vampire-Hunter/typedoc-plugin-versions)
+> and publish it to GitHub Pages — **preserving the version dropdown across releases**.
 
 Each release adds a new version to the site instead of overwriting it. The action restores the
 previously published docs before building, so the versions plugin appends rather than replaces.
 
-## Usage
+## 🚀 Usage
 
 Your repository provides a `typedoc.json` that uses the versions plugin and writes to the output
 directory (default `docs`), plus a `typedoc` npm script:
@@ -36,7 +36,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   docs:
-    name: 📚 Publish Docs
+    name: Publish Docs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -49,7 +49,7 @@ Set the repository's **Pages source to the `gh-pages` branch** (Settings → Pag
 plugin needs that persistent branch to accumulate history, so this action does not use the
 "GitHub Actions" Pages source.
 
-## Inputs
+## 🎛️ Inputs
 
 | Input | Default | Description |
 |---|---|---|
@@ -61,7 +61,7 @@ plugin needs that persistent branch to accumulate history, so this action does n
 | `install-command` | `npm ci --ignore-scripts --legacy-peer-deps` | Dependency install command. |
 | `build-command` | `npm run typedoc` | Command that runs TypeDoc. |
 
-## How it works
+## ⚙️ How it works
 
 1. Restore the docs already published on `publish-branch` into `docs-dir` — skipped on first run,
    and skipped entirely when `versions: false`.
@@ -72,11 +72,11 @@ plugin needs that persistent branch to accumulate history, so this action does n
 With `versions: false` the action just builds and deploys the current docs (each deploy replaces
 the previous site) — use this when you don't run the versions plugin.
 
-## Acknowledgments
+## 🙏 Acknowledgments
 
 Thanks to [`@shipgirl/typedoc-plugin-versions`](https://www.npmjs.com/package/@shipgirl/typedoc-plugin-versions)
 — the version dropdown and multi-version history this action publishes are powered by that plugin.
 
-## License
+## ⚖️ License
 
 MIT
