@@ -9,9 +9,11 @@ This repository follows the Bugs5382 standard workflow.
 2. Branch from `main` as `<type>/<issue#>-<slug>` (for example `feat/12-add-listener`).
 3. Commit using Conventional Commits (`type(scope): description`). No attribution
    trailers, no emoji in source or commit messages (emoji are fine in Markdown).
-4. Open a PR with a Conventional Commit title. The autolabeler sets the category label
-   from the title; fill the PR template, reference the issue (`Closes #N`), and add a
-   closing summary before merge.
+4. Open a PR as a draft with a Conventional Commit title. CI skips drafts, so run the
+   checks locally, push once they pass, and mark the PR ready when the work is finished;
+   that starts one CI run. The label checker sets the category label from the title;
+   fill the PR template, reference the issue (`Closes #N`), and add a closing summary
+   before merge.
 5. PRs merge by squash. On merge, release-drafter drafts the next notes and the changelog
    updates on `main`; the maintainer publishes releases manually.
 
