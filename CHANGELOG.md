@@ -1,5 +1,15 @@
 # typedoc-pages-action
 
+## v0.1.3 - 2026-09-27
+
+### What Changed 👀
+
+* No changes
+
+### Extra
+
+**Full Changelog**: https://github.com/Bugs5382/typedoc-pages-action/compare/v0.1.2...v0.1.3
+
 ## v0.1.2 - 2026-09-26
 
 ### What Changed 👀
