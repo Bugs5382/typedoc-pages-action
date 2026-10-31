@@ -1,6 +1,6 @@
 # typedoc-pages-action
 
-## v0.1.3 - 2026-10-28
+## v0.1.3 - 2026-10-31
 
 ### What Changed 👀
 
